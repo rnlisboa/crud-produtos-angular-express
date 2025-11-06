@@ -12,6 +12,30 @@ export default class PedidoItemRepository implements IPedidoItemRepository {
     private readonly pedidoItemModel: sequelize.ModelStatic<PedidoItem> = PedidoItem
   ) {}
 
+  public async findOne(id: string): Promise<PedidoItemEntity | null> {
+    const pedidoItem = await this.pedidoItemModel.findByPk(id);
+    return pedidoItem;
+  }
+
+  public async update(
+    id: string,
+    dados: Partial<PedidoItemEntity>
+  ): Promise<PedidoItemEntity | null> {
+    const pedidoItem = await this.pedidoItemModel.findByPk(id);
+    if (!pedidoItem) return null;
+
+    await pedidoItem.update(dados);
+    return pedidoItem;
+  }
+
+  public async delete(id: string): Promise<boolean> {
+    const deletedCount = await this.pedidoItemModel.destroy({
+      where: { id },
+    });
+
+    return deletedCount > 0;
+  }
+
   public async findAll(): Promise<Array<PedidoItemEntity>> {
     return await this.pedidoItemModel.findAll();
   }

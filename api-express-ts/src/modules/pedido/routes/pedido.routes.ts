@@ -13,8 +13,30 @@ pedidoRouter.get("/", (req: Request, res: Response) =>
   pedidoController.findAll(req, res)
 );
 
-pedidoRouter.delete("/deletar-todos", (req: Request, res: Response) =>
-  pedidoController.deleteAll(req, res)
+pedidoRouter.get("/:id", (req: Request, res: Response) =>
+  pedidoController.findOnePedido(req, res)
+);
+
+pedidoRouter.put(":id", (req: Request, res: Response) =>
+  pedidoController.updatePedido(req, res)
+);
+
+pedidoRouter.delete("/:id", (req: Request, res: Response) =>
+  pedidoController.deletePedido(req, res)
+);
+
+/** ---- ROTAS DE ITENS DO PEDIDO ---- **/
+
+pedidoRouter.get("/item/:id", (req: Request, res: Response) =>
+  pedidoController.findOnePedidoItem(req, res)
+);
+
+pedidoRouter.put("/item/:id", (req: Request, res: Response) =>
+  pedidoController.updatePedidoItem(req, res)
+);
+
+pedidoRouter.delete("/item/:id", (req: Request, res: Response) =>
+  pedidoController.deletePedidoItem(req, res)
 );
 
 export default pedidoRouter;
