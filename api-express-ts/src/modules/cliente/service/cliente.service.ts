@@ -13,6 +13,25 @@ export default class ClienteService {
     return this.clienteRepository.create(cliente);
   }
 
+  public async findOne(id: string): Promise<ClienteEntity | null> {
+    const cliente = await this.clienteRepository.findOne(id);
+    return cliente;
+  }
+
+  public async update(
+    id: string,
+    dados: Partial<ClienteEntity>
+  ): Promise<ClienteEntity | null> {
+    const cliente = await this.clienteRepository.update(id, dados);
+    return cliente;
+  }
+
+  public async delete(id: string): Promise<boolean> {
+    const deletedCount = await this.clienteRepository.delete(id);
+
+    return deletedCount;
+  }
+
   public async findAll(): Promise<Array<ClienteEntity>> {
     return await this.clienteRepository.findAll();
   }
