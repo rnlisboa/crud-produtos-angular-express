@@ -21,12 +21,30 @@ export default class PedidoService {
 
   public async createPedidoItem(item: PedidoItemEntity) {
     const newItem = await this.pedidoItemRepository.create(item);
-  
     return newItem;
   }
 
   public async findAll(): Promise<Array<PedidoEntity>> {
     return await this.pedidoRepository.findAll();
+  }
+
+  public async findOne(id: string): Promise<PedidoEntity | null> {
+    const pedido = await this.pedidoRepository.findOne(id);
+    return pedido;
+  }
+
+  public async update(
+    id: string,
+    dados: Partial<PedidoEntity>
+  ): Promise<PedidoEntity | null> {
+    const pedido = await this.pedidoRepository.update(id, dados);
+    return pedido;
+  }
+
+  public async delete(id: string): Promise<boolean> {
+    const deletedCount = await this.pedidoRepository.delete(id);
+
+    return deletedCount;
   }
 
   public async deleteAllPedidos() {
