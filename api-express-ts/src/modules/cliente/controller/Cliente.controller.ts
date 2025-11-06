@@ -23,8 +23,8 @@ export default class ClienteController {
       throw new Error("Id do cliente não informado");
     }
 
-    const clientes = await this.clienteService.findOne(id);
-    return res.status(200).json({ clientes });
+    const cliente = await this.clienteService.findOne(id);
+    return res.status(200).json({ cliente });
   }
 
   public async update(req: Request, res: Response) {

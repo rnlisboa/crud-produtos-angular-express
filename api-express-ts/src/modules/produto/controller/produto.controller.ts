@@ -23,8 +23,8 @@ export default class ProdutoController {
       throw new Error("Id do produto não informado");
     }
 
-    const produtos = await this.produtoService.findOne(id);
-    return res.status(200).json({ produtos });
+    const produto = await this.produtoService.findOne(id);
+    return res.status(200).json({ produto });
   }
 
   public async update(req: Request, res: Response) {

@@ -13,12 +13,12 @@ produtoRouter.get("/", (req: Request, res: Response) =>
   produtoController.findAll(req, res)
 );
 
-produtoRouter.get("/:id", (req: Request, res: Response) =>
-  produtoController.findAll(req, res)
+produtoRouter.put("/:id", (req: Request, res: Response) =>
+  produtoController.update(req, res)
 );
 
-produtoRouter.put("/:id", (req: Request, res: Response) =>
-  produtoController.findAll(req, res)
+produtoRouter.get("/:id", (req: Request, res: Response) =>
+  produtoController.findOne(req, res)
 );
 
 produtoRouter.delete("/:id", (req: Request, res: Response) =>
