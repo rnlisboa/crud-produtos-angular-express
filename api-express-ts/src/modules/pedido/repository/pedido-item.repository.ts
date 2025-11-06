@@ -8,16 +8,16 @@ import { Transaction } from "sequelize";
 @injectable()
 export default class PedidoItemRepository implements IPedidoItemRepository {
   constructor(
-    @inject("PedidoModel")
-    private readonly PedidoModel: sequelize.ModelStatic<PedidoItem> = PedidoItem
+    @inject("PedidoItemModel")
+    private readonly pedidoItemModel: sequelize.ModelStatic<PedidoItem> = PedidoItem
   ) {}
 
   public async findAll(): Promise<Array<PedidoItemEntity>> {
-    return await this.PedidoModel.findAll();
+    return await this.pedidoItemModel.findAll();
   }
 
   public async create(Pedido: PedidoItemEntity): Promise<PedidoItemEntity> {
-    const novoPedido = await this.PedidoModel.create(Pedido);
+    const novoPedido = await this.pedidoItemModel.create(Pedido);
     return novoPedido.toJSON() as PedidoItemEntity;
   }
 }

@@ -21,6 +21,7 @@ export default class PedidoService {
 
   public async createPedidoItem(item: PedidoItemEntity) {
     const newItem = await this.pedidoItemRepository.create(item);
+  
     return newItem;
   }
 

@@ -80,7 +80,8 @@ export default class PedidoController {
 
   private calcularTotal(produtos: ProdutoPedidoDTO[]): number {
     const total: number = produtos.reduce(
-      (accumulator, currentValue) => accumulator * currentValue.preco,
+      (accumulator, currentValue) =>
+        accumulator + currentValue.preco * currentValue.quantidade,
       0
     );
 
