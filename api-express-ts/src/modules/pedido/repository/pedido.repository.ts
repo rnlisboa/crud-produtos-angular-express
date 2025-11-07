@@ -17,8 +17,13 @@ export default class PedidoRepository implements IPedidoRepository {
     return await this.pedidoModel.findAll();
   }
 
-  public async create(Pedido: PedidoEntity): Promise<PedidoEntity> {
-    const novoPedido = await this.pedidoModel.create(Pedido);
+  public async create(
+    Pedido: PedidoEntity,
+    transaction?: Transaction
+  ): Promise<PedidoEntity> {
+    const novoPedido = await this.pedidoModel.create(Pedido, {
+      transaction: transaction ?? null,
+    });
     return novoPedido.toJSON() as PedidoEntity;
   }
 

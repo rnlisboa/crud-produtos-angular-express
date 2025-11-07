@@ -19,14 +19,20 @@ export default class PedidoService {
     private readonly pedidoItemRepository: IPedidoItemRepository
   ) {}
 
-  public async create(Pedido: PedidoEntity): Promise<PedidoEntity> {
-    const pedido = await this.pedidoRepository.create(Pedido);
+  public async create(
+    Pedido: PedidoEntity,
+    transaction?: Transaction
+  ): Promise<PedidoEntity> {
+    const pedido = await this.pedidoRepository.create(Pedido, transaction);
 
     return pedido;
   }
 
-  public async createPedidoItem(item: PedidoItemEntity) {
-    const newItem = await this.pedidoItemRepository.create(item);
+  public async createPedidoItem(
+    item: PedidoItemEntity,
+    transaction?: Transaction
+  ) {
+    const newItem = await this.pedidoItemRepository.create(item, transaction);
     return newItem;
   }
 

@@ -1,7 +1,11 @@
+import { Transaction } from "sequelize";
 import PedidoItemEntity from "../entity/pedido-item.entity.js";
 
 export default interface IPedidoItemRepository {
-  create(pedido: PedidoItemEntity): Promise<PedidoItemEntity>;
+  create(
+    pedido: PedidoItemEntity,
+    transaction?: Transaction
+  ): Promise<PedidoItemEntity>;
   findAll(): Promise<Array<PedidoItemEntity>>;
   findByPedidoId(
     pedidoId: string,

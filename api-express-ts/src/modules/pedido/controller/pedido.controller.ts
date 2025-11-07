@@ -45,8 +45,10 @@ export default class PedidoController {
       status: StatusPedido.PROCESSANDO,
     } as PedidoEntity;
 
+    const transaction = await sequelize.transaction();
+
     try {
-      const pedido = await this.pedidoService.create(newPedido);
+      const pedido = await this.pedidoService.create(newPedido, transaction);
       await Promise.all(
         produtos.map((item) => {
           const newItem = {
@@ -56,9 +58,11 @@ export default class PedidoController {
             precoUnitario: item.preco,
           } as PedidoItemEntity;
 
-          return this.pedidoService.createPedidoItem(newItem);
+          return this.pedidoService.createPedidoItem(newItem, transaction);
         })
       );
+
+      await transaction.commit();
 
       const response = {
         pedido,
@@ -66,6 +70,7 @@ export default class PedidoController {
       };
       return res.status(201).send(response).json();
     } catch (e) {
+      await transaction.rollback();
       const response = {
         message: "Erro ao criar pedido",
       };

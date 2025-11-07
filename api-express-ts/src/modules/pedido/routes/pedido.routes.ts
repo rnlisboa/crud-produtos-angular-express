@@ -28,6 +28,8 @@ pedidoRouter.delete("/:id", (req: Request, res: Response) =>
 pedidoRouter.post('/:id', (req: Request, res: Response) =>
   pedidoController.addItemtoPedido(req, res))
 
+pedidoRouter.put('/concluir/:id', (req: Request, res: Response) =>
+  pedidoController.concluirPedido(req, res))
 /** ---- ROTAS DE ITENS DO PEDIDO ---- **/
 
 pedidoRouter.get("/item/:id", (req: Request, res: Response) =>
@@ -41,5 +43,7 @@ pedidoRouter.put("/item/:id", (req: Request, res: Response) =>
 pedidoRouter.delete("/item/:id", (req: Request, res: Response) =>
   pedidoController.deletePedidoItem(req, res)
 );
+
+
 
 export default pedidoRouter;
