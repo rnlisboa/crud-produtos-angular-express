@@ -4,6 +4,7 @@ import IPedidoItemRepository from "../interfaces/ipedidoItemRepository.interface
 import { PedidoItem } from "../../../config/database/models/pedido-item.model.js";
 import PedidoItemEntity from "../entity/pedido-item.entity";
 import { Transaction } from "sequelize";
+import { Produto } from "../../../config/database/models/produto.model.js";
 
 @injectable()
 export default class PedidoItemRepository implements IPedidoItemRepository {
@@ -13,8 +14,28 @@ export default class PedidoItemRepository implements IPedidoItemRepository {
   ) {}
 
   public async findOne(id: string): Promise<PedidoItemEntity | null> {
-    const pedidoItem = await this.pedidoItemModel.findByPk(id);
+    PedidoItem.belongsTo(Produto, {
+      foreignKey: "produtoId",
+      as: "produto",
+    });
+
+    const pedidoItem = await this.pedidoItemModel.findByPk(id, {
+      include: [
+        {
+          model: Produto,
+          as: "produto",
+        },
+      ],
+    });
     return pedidoItem;
+  }
+
+  public async findByPedidoId(pedidoId: string): Promise<PedidoItemEntity[]> {
+    return await this.pedidoItemModel.findAll({
+      where: {
+        pedidoId,
+      },
+    });
   }
 
   public async update(

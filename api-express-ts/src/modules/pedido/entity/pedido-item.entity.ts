@@ -9,6 +9,15 @@ export default interface PedidoItemEntity {
   subtotal?: number;
 }
 
+export interface PedidoItemResponse {
+  id: string;
+  pedidoId: string;
+  produto: ProdutoEntity;
+  quantidade: number;
+  precoUnitario: number;
+  subtotal?: number;
+}
+
 export type ProdutoPedidoDTO = Pick<ProdutoEntity, "id" | "preco"> & {
   quantidade: number;
 };

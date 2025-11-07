@@ -1,6 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import type IPedidoItemRepository from "../interfaces/ipedidoItemRepository.interface.js";
-import PedidoItemEntity from "../entity/pedido-item.entity.js";
+import PedidoItemEntity, {
+  ProdutoPedidoDTO,
+} from "../entity/pedido-item.entity.js";
 
 @injectable()
 export default class PedidoItemService {
