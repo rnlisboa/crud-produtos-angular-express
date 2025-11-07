@@ -4,6 +4,11 @@ import type IPedidoRepository from "../interfaces/ipedidoRepository.interface.js
 import type IPedidoItemRepository from "../interfaces/ipedidoItemRepository.interface.js";
 import PedidoItemEntity from "../entity/pedido-item.entity.js";
 
+type PedidoResponse = {
+  pedidoDetalhe: PedidoEntity;
+  itens: PedidoItemEntity[];
+};
+
 @injectable()
 export default class PedidoService {
   constructor(
@@ -28,9 +33,18 @@ export default class PedidoService {
     return await this.pedidoRepository.findAll();
   }
 
-  public async findOne(id: string): Promise<PedidoEntity | null> {
+  public async findOne(id: string): Promise<PedidoResponse | null> {
     const pedido = await this.pedidoRepository.findOne(id);
-    return pedido;
+    if (!pedido) {
+      throw new Error("Pedido não encontrado");
+    }
+
+    const itens = await this.pedidoItemRepository.findByPedidoId(id);
+
+    return {
+      pedidoDetalhe: pedido,
+      itens,
+    };
   }
 
   public async update(

@@ -7,6 +7,7 @@ import PedidoItemEntity, {
   ProdutoPedidoDTO,
 } from "../entity/pedido-item.entity.js";
 import PedidoItemService from "../service/pedido-item.service.js";
+import { PedidoItem } from "../../../config/database/models/pedido-item.model.js";
 
 type CriarPedidoDTO = {
   produtos: Array<ProdutoPedidoDTO>;
@@ -34,9 +35,10 @@ export default class PedidoController {
     }
 
     const total = this.calcularTotal(produtos);
+    const quantidadeTotal = this.calcularQuantidade(produtos);
     const newPedido = {
       clienteId: requestBody.clienteId,
-      quantidade,
+      quantidade: quantidadeTotal,
       total,
       status: StatusPedido.PROCESSANDO,
     } as PedidoEntity;
@@ -131,14 +133,68 @@ export default class PedidoController {
       throw new Error("Id do item não informado");
     }
 
-    const item = await this.pedidoItemService.delete(id);
-    return res.status(200).json({ item });
+    const isDeleted = await this.pedidoItemService.delete(id);
+    if (!isDeleted) {
+      return res.status(400).json({ message: "Erro ao deletar item!" });
+    }
+    return res.status(200).json({ message: "item deletado com sucesso!" });
+  }
+
+  public async addItemtoPedido(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const produtos: ProdutoPedidoDTO[] = req.body;
+      if (!produtos) {
+        return res
+          .status(400)
+          .json({ message: "Produtos enviados incorretamente" });
+      }
+
+      if (!id) {
+        return res.status(400).json({ message: "ID do pedido é obrigatório" });
+      }
+
+      const total = this.calcularTotal(produtos);
+      const quantidadeAtual = this.calcularQuantidade(produtos);
+
+      await Promise.all(
+        produtos.map((item) => {
+          const newItem = {
+            pedidoId: id,
+            produtoId: item.id,
+            quantidade: item.quantidade,
+            precoUnitario: item.preco,
+          } as PedidoItemEntity;
+
+          return this.pedidoService.createPedidoItem(newItem);
+        })
+      );
+
+      const pedido = await this.pedidoService.findOne(id);
+      if (pedido) {
+        const dados: Partial<PedidoEntity> = {
+          quantidade:
+            Number(pedido.pedidoDetalhe?.quantidade ?? 0) + quantidadeAtual,
+          total: Number(pedido.pedidoDetalhe?.total ?? 0) + total,
+        };
+
+        await this.pedidoService.update(id, dados);
+      }
+
+      return res
+        .status(201)
+        .json({ message: "Produtos adicionados ao pedido" });
+    } catch (e) {
+      console.error(e);
+      return res
+        .status(500)
+        .json({ message: "Erro ao adicionar item ao pedido" });
+    }
   }
 
   /** PEDIDO */
   public async findOnePedido(req: Request, res: Response) {
     const { id } = req.params;
-
     if (!id) {
       throw new Error("Id do pedido não informado");
     }
@@ -150,7 +206,7 @@ export default class PedidoController {
   public async updatePedido(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const dados: Partial<PedidoItemEntity> = req.body;
+      const dados: Partial<PedidoEntity> = req.body;
       if (!id) {
         return res.status(400).json({ message: "ID do pedido é obrigatório" });
       }
@@ -183,8 +239,11 @@ export default class PedidoController {
       throw new Error("Id do pedido não informado");
     }
 
-    const pedido = await this.pedidoService.delete(id);
-    return res.status(200).json({ pedido });
+    const isDeleted = await this.pedidoService.delete(id);
+    if (!isDeleted) {
+      return res.status(400).json({ message: "Erro ao deletar pedido!" });
+    }
+    return res.status(200).json({ message: "Pedido deletado com sucesso!" });
   }
 
   private calcularTotal(produtos: ProdutoPedidoDTO[]): number {
@@ -195,5 +254,14 @@ export default class PedidoController {
     );
 
     return total;
+  }
+
+  private calcularQuantidade(produtos: ProdutoPedidoDTO[]): number {
+    const qunatidade: number = produtos.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.quantidade,
+      0
+    );
+
+    return qunatidade;
   }
 }
