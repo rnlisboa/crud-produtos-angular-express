@@ -7,7 +7,8 @@ import PedidoItemEntity, {
   ProdutoPedidoDTO,
 } from "../entity/pedido-item.entity.js";
 import PedidoItemService from "../service/pedido-item.service.js";
-import { PedidoItem } from "../../../config/database/models/pedido-item.model.js";
+import ProdutoService from "../../produto/service/produto.service.js";
+import { sequelize } from "../../../config/database/database.js";
 
 type CriarPedidoDTO = {
   produtos: Array<ProdutoPedidoDTO>;
@@ -19,7 +20,8 @@ type CriarPedidoDTO = {
 export default class PedidoController {
   constructor(
     private readonly pedidoService: PedidoService,
-    private readonly pedidoItemService: PedidoItemService
+    private readonly pedidoItemService: PedidoItemService,
+    private readonly produtoService: ProdutoService
   ) {}
 
   public async create(req: Request, res: Response) {
@@ -97,6 +99,7 @@ export default class PedidoController {
     return res.status(200).json({ item });
   }
 
+  // altera entidade pedido em quantidade e total
   public async updatePedidoItem(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -113,6 +116,8 @@ export default class PedidoController {
           .json({ message: "Item não encontrado para atualização" });
       }
 
+      await this.pedidoService.recaulcularPedido(PedidoItem.pedidoId);
+
       return res.status(200).json({
         message: "Item atualizado com sucesso!",
         item: PedidoItem,
@@ -126,6 +131,7 @@ export default class PedidoController {
     }
   }
 
+  // altera entidade pedido em quantidade e total
   public async deletePedidoItem(req: Request, res: Response) {
     const { id } = req.params;
 
@@ -133,13 +139,25 @@ export default class PedidoController {
       throw new Error("Id do item não informado");
     }
 
+    const item = await this.pedidoItemService.findOne(id);
+
+    if (!item) {
+      return res.status(404).json({ message: "Item não encontrado" });
+    }
+
+    const pedidoId = item.pedidoId;
+
     const isDeleted = await this.pedidoItemService.delete(id);
     if (!isDeleted) {
       return res.status(400).json({ message: "Erro ao deletar item!" });
     }
+
+    await this.pedidoService.recaulcularPedido(pedidoId);
+
     return res.status(200).json({ message: "item deletado com sucesso!" });
   }
 
+  // altera entidade pedido em quantidade e total
   public async addItemtoPedido(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -154,9 +172,6 @@ export default class PedidoController {
         return res.status(400).json({ message: "ID do pedido é obrigatório" });
       }
 
-      const total = this.calcularTotal(produtos);
-      const quantidadeAtual = this.calcularQuantidade(produtos);
-
       await Promise.all(
         produtos.map((item) => {
           const newItem = {
@@ -170,16 +185,7 @@ export default class PedidoController {
         })
       );
 
-      const pedido = await this.pedidoService.findOne(id);
-      if (pedido) {
-        const dados: Partial<PedidoEntity> = {
-          quantidade:
-            Number(pedido.pedidoDetalhe?.quantidade ?? 0) + quantidadeAtual,
-          total: Number(pedido.pedidoDetalhe?.total ?? 0) + total,
-        };
-
-        await this.pedidoService.update(id, dados);
-      }
+      this.pedidoService.recaulcularPedido(id);
 
       return res
         .status(201)
@@ -244,6 +250,62 @@ export default class PedidoController {
       return res.status(400).json({ message: "Erro ao deletar pedido!" });
     }
     return res.status(200).json({ message: "Pedido deletado com sucesso!" });
+  }
+
+  public async concluirPedido(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Id do pedido não informado" });
+    }
+
+    const transaction = await sequelize.transaction();
+
+    try {
+      const pedido = await this.pedidoService.update(
+        id,
+        { status: StatusPedido.CONCLUIDO },
+        transaction
+      );
+
+      if (!pedido) {
+        await transaction.rollback();
+        return res.status(404).json({ message: "Pedido não encontrado" });
+      }
+
+      const itens = await this.pedidoItemService.findByPedidoId(pedido.id);
+
+      for (const item of itens) {
+        const produto = await this.produtoService.findOne(item.produtoId);
+
+        if (!produto) {
+          await transaction.rollback();
+          return res.status(404).json({ message: "Produto não encontrado" });
+        }
+
+        const estoqueAtualizado = produto.estoque - item.quantidade;
+
+        if (estoqueAtualizado < 0) {
+          await transaction.rollback();
+          return res
+            .status(400)
+            .json({ message: "Produto sem estoque suficiente" });
+        }
+
+        await this.produtoService.update(
+          produto.id,
+          { estoque: estoqueAtualizado },
+          transaction
+        );
+      }
+
+      await transaction.commit();
+      return res.status(200).json({ message: "Pedido concluído com sucesso" });
+    } catch (e) {
+      await transaction.rollback();
+      console.error(e);
+      return res.status(500).json({ message: "Erro ao concluir pedido" });
+    }
   }
 
   private calcularTotal(produtos: ProdutoPedidoDTO[]): number {

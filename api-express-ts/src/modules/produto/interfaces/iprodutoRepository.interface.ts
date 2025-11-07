@@ -1,3 +1,4 @@
+import { Transaction } from "sequelize";
 import ProdutoEntity from "../entity/produto.entity.js";
 
 export default interface IProdutoRepository {
@@ -6,7 +7,8 @@ export default interface IProdutoRepository {
   findOne(id: string): Promise<ProdutoEntity | null>;
   update(
     id: string,
-    dados: Partial<ProdutoEntity>
+    dados: Partial<ProdutoEntity>,
+    transaction?: Transaction
   ): Promise<ProdutoEntity | null>;
   delete(id: string): Promise<boolean>;
 }

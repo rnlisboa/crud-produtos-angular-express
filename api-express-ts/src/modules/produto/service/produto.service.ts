@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import ProdutoEntity from "../entity/produto.entity.js";
 import type IProdutoRepository from "../interfaces/iprodutoRepository.interface.js";
+import { Transaction } from "sequelize";
 
 @injectable()
 export default class ProdutoService {
@@ -20,9 +21,10 @@ export default class ProdutoService {
 
   public async update(
     id: string,
-    dados: Partial<ProdutoEntity>
+    dados: Partial<ProdutoEntity>,
+    transaction?: Transaction
   ): Promise<ProdutoEntity | null> {
-    const produto = await this.produtoRepository.update(id, dados);
+    const produto = await this.produtoRepository.update(id, dados, transaction);
     return produto;
   }
 

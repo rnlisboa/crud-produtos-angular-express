@@ -5,6 +5,7 @@ import { inject, injectable } from "tsyringe";
 import IPedidoRepository from "../interfaces/ipedidoRepository.interface.js";
 import { Pedido } from "../../../config/database/models/pedido.model.js";
 import PedidoEntity from "../entity/pedido.entity.js";
+import { Transaction } from "sequelize";
 
 @injectable()
 export default class PedidoRepository implements IPedidoRepository {
@@ -33,12 +34,13 @@ export default class PedidoRepository implements IPedidoRepository {
 
   public async update(
     id: string,
-    dados: Partial<PedidoEntity>
+    dados: Partial<PedidoEntity>,
+    transaction?: Transaction
   ): Promise<PedidoEntity | null> {
     const pedido = await this.pedidoModel.findByPk(id);
     if (!pedido) return null;
 
-    await pedido.update(dados);
+    await pedido.update(dados, { transaction: transaction ?? null });
     return pedido;
   }
 

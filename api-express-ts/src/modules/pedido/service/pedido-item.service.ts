@@ -37,4 +37,10 @@ export default class PedidoItemService {
   public async findAll(): Promise<Array<PedidoItemEntity>> {
     return await this.pedidoItemRepository.findAll();
   }
+
+  public async findByPedidoId(
+    pedidoId: string
+  ): Promise<Array<PedidoItemEntity>> {
+    return this.pedidoItemRepository.findByPedidoId(pedidoId);
+  }
 }

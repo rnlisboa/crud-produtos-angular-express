@@ -30,12 +30,19 @@ export default class PedidoItemRepository implements IPedidoItemRepository {
     return pedidoItem;
   }
 
-  public async findByPedidoId(pedidoId: string): Promise<PedidoItemEntity[]> {
-    return await this.pedidoItemModel.findAll({
-      where: {
-        pedidoId,
-      },
-    });
+  public async findByPedidoId(
+    pedidoId: string,
+    campos?: string[]
+  ): Promise<PedidoItemEntity[]> {
+    const options: any = {
+      where: { pedidoId },
+    };
+
+    if (campos) {
+      options.attributes = campos;
+    }
+
+    return this.pedidoItemModel.findAll(options);
   }
 
   public async update(
