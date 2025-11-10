@@ -9,4 +9,5 @@ export default interface ICLienteRepository {
     dados: Partial<ClienteEntity>
   ): Promise<ClienteEntity | null>;
   delete(id: string): Promise<boolean>;
+  findOneByEmail(email: string): Promise<ClienteEntity | null>;
 }

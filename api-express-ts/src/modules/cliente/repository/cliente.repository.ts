@@ -43,4 +43,12 @@ export default class ClienteRepository implements ICLienteRepository {
   public async findAll(): Promise<Array<ClienteEntity>> {
     return await this.clienteModel.findAll();
   }
+
+  public async findOneByEmail(email: string): Promise<ClienteEntity | null> {
+    return await this.clienteModel.findOne({
+      where: {
+        email,
+      },
+    });
+  }
 }

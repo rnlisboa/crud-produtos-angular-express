@@ -71,4 +71,19 @@ export default class ClienteController {
     const clientes = await this.clienteService.findAll();
     return res.status(200).send(clientes).json();
   }
+
+  public async findOneByEmail(req: Request, res: Response) {
+    const email = req.query.email as string;
+    if (!email) {
+      return res.status(400).json({ message: "Email não enviado" });
+    }
+    const cliente = await this.clienteService.findOneByEmail(email);
+
+    if (!cliente) {
+      return res
+        .status(404)
+        .json({ message: "Cliente com este email não encontrado" });
+    }
+    return res.status(200).send(cliente).json();
+  }
 }

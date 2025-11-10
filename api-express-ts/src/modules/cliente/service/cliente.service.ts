@@ -35,4 +35,8 @@ export default class ClienteService {
   public async findAll(): Promise<Array<ClienteEntity>> {
     return await this.clienteRepository.findAll();
   }
+
+  public async findOneByEmail(email: string): Promise<ClienteEntity | null> {
+    return await this.clienteRepository.findOneByEmail(email);
+  }
 }

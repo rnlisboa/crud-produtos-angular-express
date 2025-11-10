@@ -13,6 +13,10 @@ clienteRouter.get("/", (req: Request, res: Response) =>
   clienteController.findAll(req, res)
 );
 
+clienteRouter.get("/find-one-by-email", (req: Request, res: Response) =>
+  clienteController.findOneByEmail(req, res)
+);
+
 clienteRouter.get("/:id", (req: Request, res: Response) =>
   clienteController.findOne(req, res)
 );
