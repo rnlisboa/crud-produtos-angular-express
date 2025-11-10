@@ -69,7 +69,7 @@ export default class ClienteController {
 
   public async findAll(req: Request, res: Response) {
     const clientes = await this.clienteService.findAll();
-    return res.status(200).send(clientes).json();
+    return res.status(200).json(clientes);
   }
 
   public async findOneByEmail(req: Request, res: Response) {
@@ -84,6 +84,6 @@ export default class ClienteController {
         .status(404)
         .json({ message: "Cliente com este email não encontrado" });
     }
-    return res.status(200).send(cliente).json();
+    return res.status(200).json(cliente);
   }
 }

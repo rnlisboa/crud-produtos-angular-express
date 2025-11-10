@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from 'cors';
 import "reflect-metadata";
 import "./modules/container/container.js";
 import { connectDatabase, sequelize } from "./config/database/database.js";
@@ -7,6 +8,7 @@ import routes from "./routes/index.js";
 const app = express();
 
 app.use(express.json());
+app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
