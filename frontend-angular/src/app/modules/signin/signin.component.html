@@ -1,1 +1,26 @@
-<p>signin works!</p>
+<div style="width: 25%; margin: 0 auto; margin-top: 10rem">
+  <po-dynamic-form
+    [p-fields]="fields"
+    #dynamicForm
+    p-auto-focus="name"
+    [p-value]="credentials"
+  >
+  </po-dynamic-form>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-12"
+      p-label="Entrar"
+      [p-disabled]="!!dynamicForm.form.invalid"
+      (p-click)="login(); dynamicForm.form.reset()"
+    >
+    </po-button>
+  </div>
+
+  <div class="po-row">
+    <span class="po-md-12">
+      Não possui conta?
+      <po-link p-label="Cadastre-se" (p-action)="redirect()"></po-link>
+    </span>
+  </div>
+</div>

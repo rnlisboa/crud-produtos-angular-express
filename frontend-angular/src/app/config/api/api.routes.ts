@@ -10,7 +10,8 @@ export const ApiRoutes = {
     findOne: (id: string) => `${api}/clientes/${id}`, // GET
     update: (id: string) => `${api}/clientes/${id}`, // PUT
     delete: (id: string) => `${api}/clientes/${id}`, // DELETE
-    findOneByEmail: (email: string) => `${api}/clientes/email=${email}`, // GET
+    findOneByEmail: (email: string) =>
+      `${api}/clientes/find-one-by-email?email=${email}`, // GET
   },
 
   produtos: {

@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CredentialsVO } from '../../value-objects/credentials.vo';
 import { ClienteService } from '../cliente-service/cliente.service';
+import { Router } from '@angular/router';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 export type Credentials = {
   nome: string;
@@ -11,12 +13,14 @@ export type Credentials = {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private clienteService: ClienteService) {}
+  poNotification = inject(PoNotificationService);
+  constructor(private clienteService: ClienteService, private router: Router) {}
 
   isAuthenticated(): boolean {
-    const credentials: Credentials = JSON.parse(
-      localStorage.getItem('cliente') || ''
-    );
+    const stored = localStorage.getItem('cliente');
+    if (!stored) return false;
+
+    const credentials: Credentials = JSON.parse(stored);
     return !!credentials;
   }
 
@@ -26,16 +30,21 @@ export class AuthService {
 
   login(credentials: CredentialsVO) {
     const email = credentials.email;
-    try {
-      const cliente = this.clienteService
-        .findOneByEmail(email)
-        .subscribe((cliente) => {
-          if (!!cliente) {
-            localStorage.setItem('cliente', JSON.stringify(cliente));
-          }
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    this.clienteService.findOneByEmail(email).subscribe({
+      next: (cliente) => {
+        if (cliente) {
+          localStorage.setItem('cliente', JSON.stringify(cliente));
+          this.poNotification.success('Autenticado com sucesso');
+          this.router.navigate(['/dashboard']);
+        }
+      },
+      error: (err) => {
+        if (err.status === 400) {
+          this.poNotification.error('Cliente não encontrado');
+        } else {
+          this.poNotification.error('Erro inesperado');
+        }
+      },
+    });
   }
 }
