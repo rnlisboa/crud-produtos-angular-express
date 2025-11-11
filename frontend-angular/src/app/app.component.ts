@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import {
-  PoMenuItem,
   PoMenuModule,
   PoPageModule,
   PoToolbarModule,
@@ -26,7 +25,6 @@ import { HeaderComponent } from './shared/components/header/header.component';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  currentRoute = '';
   deveMostrarCabecalho: boolean = true;
 
   constructor(private router: Router) {
@@ -34,11 +32,8 @@ export class AppComponent {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        const url: string = event.url;
-        const formatted = url.split('/')[1];
+        const formatted = event.url.split('/')[1];
         this.deveMostrarCabecalho = !!routes[formatted];
-        console.log(routes[formatted], formatted);
-        console.log(this.deveMostrarCabecalho);
       });
   }
 }
