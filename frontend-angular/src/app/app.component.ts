@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import {
   PoMenuItem,
@@ -8,6 +8,9 @@ import {
   PoPageModule,
   PoToolbarModule,
 } from '@po-ui/ng-components';
+import { filter } from 'rxjs';
+import { moduleRoutes } from './app.routes';
+import { HeaderComponent } from './shared/components/header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +20,25 @@ import {
     PoMenuModule,
     PoPageModule,
     RouterOutlet,
+    HeaderComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  readonly menus: Array<PoMenuItem> = [
-    { label: 'Home', action: this.onClick.bind(this) },
-  ];
+  currentRoute = '';
+  deveMostrarCabecalho: boolean = true;
 
-  private onClick() {
-    alert('Clicked in menu item');
+  constructor(private router: Router) {
+    const routes = moduleRoutes;
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        const url: string = event.url;
+        const formatted = url.split('/')[1];
+        this.deveMostrarCabecalho = !!routes[formatted];
+        console.log(routes[formatted], formatted);
+        console.log(this.deveMostrarCabecalho);
+      });
   }
 }

@@ -7,21 +7,33 @@ import { PedidosComponent } from './modules/pedidos/pedidos.component';
 import { SignupComponent } from './modules/signup/signup.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 
+export const moduleRoutes: Record<string, string> = {
+  clientes: 'clientes',
+  produtos: 'produtos',
+  pedidos: 'pedidos',
+  dashboard: 'dashboard',
+};
+
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: moduleRoutes['dashboard'], pathMatch: 'full' },
   {
-    path: 'clientes',
+    path: moduleRoutes['clientes'],
     component: ClientesComponent,
     canActivate: [AuthGuardService],
   },
   {
-    path: 'produtos',
+    path: moduleRoutes['produtos'],
     component: ProdutosComponent,
     canActivate: [AuthGuardService],
   },
   {
-    path: 'pedidos',
+    path: moduleRoutes['pedidos'],
     component: PedidosComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: moduleRoutes['dashboard'],
+    component: DashboardComponent,
     canActivate: [AuthGuardService],
   },
   {
@@ -31,10 +43,5 @@ export const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent,
-  },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuardService],
   },
 ];
