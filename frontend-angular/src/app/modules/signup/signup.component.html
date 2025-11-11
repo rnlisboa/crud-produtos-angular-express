@@ -1,1 +1,9 @@
-<p>signup works!</p>
+<app-dynamic-form
+  [fields]="fields"
+  [model]="clienteDTO"
+  buttonLabel="Cadastrar"
+  secondaryText="Já possui conta?"
+  linkLabel="Faça login"
+  [linkAction]="redirect.bind(this)"
+  (formSubmit)="register()"
+></app-dynamic-form>

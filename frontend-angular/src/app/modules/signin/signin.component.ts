@@ -1,10 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import {
   AuthService,
   Credentials,
@@ -14,21 +9,13 @@ import { CredentialsVO } from '../../value-objects/credentials.vo';
 import {
   PoDynamicFormField,
   PoNotificationService,
-  PoDynamicModule,
-  PoButtonModule,
-  PoLinkModule,
 } from '@po-ui/ng-components';
-import { PoPageLoginModule } from '@po-ui/ng-templates';
+import { CommonModule } from '@angular/common';
+import { DynamicFormComponent } from '../../shared/components/dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-signin',
-  imports: [
-    ReactiveFormsModule,
-    PoDynamicModule,
-    PoButtonModule,
-    PoPageLoginModule,
-    PoLinkModule,
-  ],
+  imports: [CommonModule, DynamicFormComponent],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.less',
 })
@@ -50,6 +37,7 @@ export class SigninComponent implements OnInit {
     },
     {
       property: 'email',
+      required: true,
       gridColumns: 12,
       icon: 'an an-envelope',
       placeholder: 'voce@gmail.com',
