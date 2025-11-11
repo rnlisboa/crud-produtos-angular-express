@@ -1,1 +1,22 @@
-<p>produtos works!</p>
+@for (item of produtos; track $index) {
+<po-widget
+  class="po-lg-6"
+  p-help="https://github.com/po-ui/po-angular/stargazers"
+  [p-title]="item.nome"
+  p-tag="Sales"
+  p-tag-icon="an an-arrow-circle-up"
+  [p-height]="250"
+>
+  <div>{{ item.descricao }}</div>
+  <div>
+    Estoque: <strong>{{ item.estoque }}</strong>
+  </div>
+  <div>
+    Preço: <strong>{{ item.preco }}</strong>
+  </div>
+  <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
+    <po-button p-label="Remover" p-danger></po-button>
+    <po-button p-label="Adicionar a um pedido"></po-button>
+  </div>
+</po-widget>
+} @empty { }
