@@ -1,1 +1,6 @@
-<p>clientes works!</p>
+<app-dynamic-form
+  [fields]="fields"
+  [model]="cliente"
+  buttonLabel="Salvar"
+  (formSubmit)="update()"
+></app-dynamic-form>
