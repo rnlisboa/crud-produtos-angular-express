@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiRoutes } from '../../config/api/api.routes';
 import { map, Observable } from 'rxjs';
-import ClienteEntity from '../../domain/cliente.entity';
+import ClienteEntity from '../../interfaces/domain/cliente.entity';
+import { ClienteDTO } from '../../interfaces/dto/cliente.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClienteService {
-  _clienteRoutes = ApiRoutes.clientes;
+  private _clienteRoutes = ApiRoutes.clientes;
 
   constructor(private httpCliente: HttpClient) {}
 
@@ -20,5 +21,12 @@ export class ClienteService {
           return user;
         })
       );
+  }
+
+  register(cliente: ClienteDTO): Observable<ClienteEntity> {
+    return this.httpCliente.post<ClienteEntity>(
+      this._clienteRoutes.create,
+      cliente
+    );
   }
 }

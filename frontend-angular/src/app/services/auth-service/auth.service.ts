@@ -39,7 +39,7 @@ export class AuthService {
         }
       },
       error: (err) => {
-        if (err.status === 400) {
+        if (err.status === 400 || err.status === 404) {
           this.poNotification.error('Cliente não encontrado');
         } else {
           this.poNotification.error('Erro inesperado');
