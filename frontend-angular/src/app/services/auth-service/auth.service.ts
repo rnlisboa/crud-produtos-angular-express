@@ -3,6 +3,7 @@ import { CredentialsVO } from '../../value-objects/credentials.vo';
 import { ClienteService } from '../cliente-service/cliente.service';
 import { Router } from '@angular/router';
 import { PoNotificationService } from '@po-ui/ng-components';
+import ClienteEntity from '../../interfaces/domain/cliente.entity';
 
 export type Credentials = {
   nome: string;
@@ -17,11 +18,8 @@ export class AuthService {
   constructor(private clienteService: ClienteService, private router: Router) {}
 
   isAuthenticated(): boolean {
-    const stored = localStorage.getItem('cliente');
-    if (!stored) return false;
-
-    const credentials: Credentials = JSON.parse(stored);
-    return !!credentials;
+    const stored = this.getLoggedCliente();
+    return !!stored;
   }
 
   logout() {
@@ -46,5 +44,14 @@ export class AuthService {
         }
       },
     });
+  }
+
+  getLoggedCliente() {
+    const stored = localStorage.getItem('cliente');
+    if (!stored) {
+      return null;
+    }
+
+    return JSON.parse(stored) as ClienteEntity;
   }
 }
