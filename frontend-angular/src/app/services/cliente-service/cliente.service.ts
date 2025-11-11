@@ -29,4 +29,14 @@ export class ClienteService {
       cliente
     );
   }
+
+  update(
+    id: string,
+    cliente: Partial<ClienteEntity>
+  ): Observable<ClienteEntity> {
+    return this.httpCliente.put<ClienteEntity>(
+      this._clienteRoutes.update(id),
+      cliente
+    );
+  }
 }
