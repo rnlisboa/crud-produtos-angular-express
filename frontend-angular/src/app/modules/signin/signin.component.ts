@@ -1,9 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import {
-  AuthService,
-  Credentials,
-} from '../../services/auth-service/auth.service';
+import { AuthService, Credentials } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { CredentialsVO } from '../../value-objects/credentials.vo';
 import {
@@ -66,6 +63,6 @@ export class SigninComponent implements OnInit {
   }
 
   redirect() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/signup']);
   }
 }

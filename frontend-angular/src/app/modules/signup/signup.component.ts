@@ -8,15 +8,12 @@ import {
   PoNotificationService,
 } from '@po-ui/ng-components';
 import { PoPageLoginModule } from '@po-ui/ng-templates';
-import {
-  AuthService,
-  Credentials,
-} from '../../services/auth-service/auth.service';
+import { AuthService, Credentials } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { ClienteDTO } from '../../interfaces/dto/cliente.dto';
 import { EmailVO } from '../../value-objects/email.vo';
 import { TelefoneVO } from '../../value-objects/telefone.vo';
-import { ClienteService } from '../../services/cliente-service/cliente.service';
+import { ClienteService } from '../../services/clientes/cliente.service';
 import { CommonModule } from '@angular/common';
 import { DynamicFormComponent } from '../../shared/components/dynamic-form/dynamic-form.component';
 

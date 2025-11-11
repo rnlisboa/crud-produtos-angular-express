@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
+  Input,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -19,7 +20,7 @@ import {
   PoNotificationService,
   PoToasterOrientation,
 } from '@po-ui/ng-components';
-import { AuthService } from '../../../services/auth-service/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -61,9 +62,9 @@ export class HeaderComponent {
       action: this.myAction.bind(this, 'Configuração'),
     },
     {
-      label: 'Saír',
+      label: 'Sair',
       icon: 'an an-sign-out',
-      tooltip: 'Saír',
+      tooltip: 'Sair',
       action: this.myAction.bind(this, 'signout'),
     },
     {
@@ -83,33 +84,6 @@ export class HeaderComponent {
     action: this.myAction.bind(this, '/clientes'),
     status: 'positive',
   };
-
-  systemApps = [
-    {
-      icon: 'an an-reddit-logo',
-      action: this.myAction.bind(this, 'Aplicativo 1'),
-    },
-    {
-      icon: 'an an-twitter-logo',
-      action: this.myAction.bind(this, 'Aplicativo 2'),
-    },
-    {
-      icon: 'an an-twitch-logo',
-      action: this.myAction.bind(this, 'Aplicativo 3'),
-    },
-    {
-      icon: 'an an-facebook-logo',
-      action: this.myAction.bind(this, 'Aplicativo 4'),
-    },
-    {
-      icon: 'an an-meta-logo',
-      action: this.myAction.bind(this, 'Aplicativo 5'),
-    },
-    {
-      icon: 'an an-amazon-logo',
-      action: this.myAction.bind(this, 'Aplicativo 6'),
-    },
-  ];
 
   constructor(
     private cd: ChangeDetectorRef,

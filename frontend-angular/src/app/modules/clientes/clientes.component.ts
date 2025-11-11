@@ -4,9 +4,9 @@ import {
   PoDynamicFormField,
   PoNotificationService,
 } from '@po-ui/ng-components';
-import { ClienteService } from '../../services/cliente-service/cliente.service';
+import { ClienteService } from '../../services/clientes/cliente.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth-service/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { DynamicFormComponent } from '../../shared/components/dynamic-form/dynamic-form.component';
 

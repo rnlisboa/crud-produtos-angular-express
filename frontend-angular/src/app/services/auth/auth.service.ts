@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CredentialsVO } from '../../value-objects/credentials.vo';
-import { ClienteService } from '../cliente-service/cliente.service';
+import { ClienteService } from '../clientes/cliente.service';
 import { Router } from '@angular/router';
 import { PoNotificationService } from '@po-ui/ng-components';
 import ClienteEntity from '../../interfaces/domain/cliente.entity';
