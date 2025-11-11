@@ -24,6 +24,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('cliente');
+    this.router.navigate(['/signin']);
   }
 
   login(credentials: CredentialsVO) {
