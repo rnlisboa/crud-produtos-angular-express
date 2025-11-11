@@ -42,7 +42,6 @@ export class DynamicFormComponent {
   onSubmit() {
     if (this.dynamicForm.form.valid) {
       this.formSubmit.emit(this.model);
-      this.dynamicForm.form.reset();
     }
   }
 }
