@@ -1,0 +1,28 @@
+<div style="width: 25%; margin: 0 auto; margin-top: 10rem">
+  <po-dynamic-form
+    [p-fields]="fields"
+    [p-value]="model"
+    #dynamicForm
+    p-auto-focus="name"
+  >
+  </po-dynamic-form>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-12"
+      [p-label]="buttonLabel"
+      [p-disabled]="!!dynamicForm.form.invalid"
+      (p-click)="onSubmit()"
+    >
+    </po-button>
+  </div>
+
+  @if (secondaryText && linkLabel) {
+  <div class="po-row">
+    <span class="po-md-12">
+      {{ secondaryText }}
+      <po-link [p-label]="linkLabel" (p-action)="linkAction()"></po-link>
+    </span>
+  </div>
+  }
+</div>
