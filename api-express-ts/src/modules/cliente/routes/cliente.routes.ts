@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import ClienteController from "../controller/Cliente.controller.js";
 import { container } from "tsyringe";
+import ClienteController from "../controller/Cliente.controller.js";
 
 const clienteRouter = Router();
 const clienteController = container.resolve(ClienteController);

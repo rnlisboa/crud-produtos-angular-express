@@ -9,11 +9,7 @@ export default class ClienteController {
 
   public async create(req: Request, res: Response) {
     const cliente = await this.clienteService.create(req.body);
-    const response = {
-      cliente,
-      message: "Cliente criado com sucesso!",
-    };
-    return res.status(201).send(response).json();
+    return res.status(201).send(cliente).json();
   }
 
   public async findOne(req: Request, res: Response) {
