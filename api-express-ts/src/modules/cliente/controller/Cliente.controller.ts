@@ -40,7 +40,6 @@ export default class ClienteController {
       }
 
       return res.status(200).json({
-        message: "Cliente atualizado com sucesso!",
         cliente: clienteAtualizado,
       });
     } catch (error: any) {
