@@ -20,5 +20,5 @@ export class ProdutoService {
           return produtos;
         })
       );
-  }
+  } 
 }

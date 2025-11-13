@@ -14,11 +14,6 @@ export default class PedidoItemRepository implements IPedidoItemRepository {
   ) {}
 
   public async findOne(id: string): Promise<PedidoItemEntity | null> {
-    PedidoItem.belongsTo(Produto, {
-      foreignKey: "produtoId",
-      as: "produto",
-    });
-
     const pedidoItem = await this.pedidoItemModel.findByPk(id, {
       include: [
         {
@@ -36,6 +31,12 @@ export default class PedidoItemRepository implements IPedidoItemRepository {
   ): Promise<PedidoItemEntity[]> {
     const options: any = {
       where: { pedidoId },
+      include: [
+        {
+          model: Produto,
+          as: "produto",
+        },
+      ],
     };
 
     if (campos) {

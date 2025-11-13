@@ -63,9 +63,10 @@ export default class PedidoController {
       );
 
       await transaction.commit();
+      const newProduto = await this.pedidoService.findOne(pedido.id);
 
       const response = {
-        pedido,
+        pedido: newProduto,
         message: "Pedido criado com sucesso!",
       };
       return res.status(201).send(response).json();

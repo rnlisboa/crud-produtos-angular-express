@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import PedidoItemEntity from "../../../modules/pedido/entity/pedido-item.entity.js";
 import { sequelize } from "../database.js";
+import { Produto } from "./produto.model.js";
 
 interface PedidoItemCreation extends Optional<PedidoItemEntity, "id"> {}
 
@@ -57,3 +58,5 @@ PedidoItem.init(
     timestamps: false,
   }
 );
+
+PedidoItem.belongsTo(Produto, { foreignKey: "produtoId", as: "produto" });

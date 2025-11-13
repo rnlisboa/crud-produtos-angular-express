@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import {
@@ -10,6 +10,8 @@ import {
 import { filter } from 'rxjs';
 import { moduleRoutes } from './app.routes';
 import { HeaderComponent } from './shared/components/header/header.component';
+import { PedidoService } from './services/pedidos/pedido.service';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',

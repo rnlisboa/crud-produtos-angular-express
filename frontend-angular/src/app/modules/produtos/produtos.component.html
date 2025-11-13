@@ -1,22 +1,73 @@
-@for (item of produtos; track $index) {
-<po-widget
-  class="po-lg-6"
-  p-help="https://github.com/po-ui/po-angular/stargazers"
-  [p-title]="item.nome"
-  p-tag="Sales"
-  p-tag-icon="an an-arrow-circle-up"
-  [p-height]="250"
->
-  <div>{{ item.descricao }}</div>
+<div class="po-pl-5 po-m-5">
+  <po-button
+    [p-label]="existePedidoProcessando ? 'Adicionar ao pedido' : 'Criar Pedido'"
+    class="po-pl-1 po-mb-1"
+    [p-disabled]="!produtoPedido.length"
+    (p-click)="adicionarAoPedido()"
+  ></po-button>
+
   <div>
-    Estoque: <strong>{{ item.estoque }}</strong>
+    @for (item of produtos; track $index) {
+    <po-widget
+      class="po-lg-6"
+      p-help="https://github.com/po-ui/po-angular/stargazers"
+      [p-title]="item.nome"
+      p-tag="Sales"
+      p-tag-icon="an an-arrow-circle-up"
+      [p-height]="250"
+    >
+      <div>{{ item.descricao }}</div>
+      <div>
+        Estoque: <strong>{{ item.estoque }}</strong>
+      </div>
+      <div>
+        Preço: <strong>{{ item.preco }}</strong>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+          align-items: center;
+        "
+      >
+        @if(isProdutoSelecionado(item.id)){
+        <po-number
+          class="po-md-6 po-lg-3"
+          name="maxlength"
+          [(ngModel)]="qtdSelecionado"
+          p-clean
+        >
+        </po-number>
+
+        <po-button
+          p-icon="an an-check-fat"
+          p-primary
+          (p-click)="confirmarSelecaoProduto(item)"
+        ></po-button>
+
+        <po-button
+          p-icon="an an-x"
+          p-danger
+          (p-click)="resetProdutoSelecionado()"
+        ></po-button>
+
+        } @else if(isProdutoPedido(item.id)) {
+        <po-button
+          p-label="Remover do pedido"
+          p-danger
+          (p-click)="deletePedidoItem(item.id)"
+        ></po-button>
+        } @else {
+        <po-button
+          p-label="Adicionar a um pedido"
+          (p-click)="selecionarProduto(item.id)"
+        ></po-button>
+        }
+      </div>
+    </po-widget>
+    } @empty {
+    <P>Sem produtos cadastrados</P>
+    }
   </div>
-  <div>
-    Preço: <strong>{{ item.preco }}</strong>
-  </div>
-  <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
-    <po-button p-label="Remover" p-danger></po-button>
-    <po-button p-label="Adicionar a um pedido"></po-button>
-  </div>
-</po-widget>
-} @empty { }
+</div>

@@ -5,17 +5,15 @@ import { SigninComponent } from './modules/signin/signin.component';
 import { ProdutosComponent } from './modules/produtos/produtos.component';
 import { PedidosComponent } from './modules/pedidos/pedidos.component';
 import { SignupComponent } from './modules/signup/signup.component';
-import { DashboardComponent } from './modules/dashboard/dashboard.component';
 
 export const moduleRoutes: Record<string, string> = {
   clientes: 'clientes',
   produtos: 'produtos',
   pedidos: 'pedidos',
-  dashboard: 'dashboard',
 };
 
 export const routes: Routes = [
-  { path: '', redirectTo: moduleRoutes['dashboard'], pathMatch: 'full' },
+  { path: '', redirectTo: moduleRoutes['produtos'], pathMatch: 'full' },
   {
     path: moduleRoutes['clientes'],
     component: ClientesComponent,
@@ -29,11 +27,6 @@ export const routes: Routes = [
   {
     path: moduleRoutes['pedidos'],
     component: PedidosComponent,
-    canActivate: [AuthGuardService],
-  },
-  {
-    path: moduleRoutes['dashboard'],
-    component: DashboardComponent,
     canActivate: [AuthGuardService],
   },
   {

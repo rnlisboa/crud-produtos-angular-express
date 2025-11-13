@@ -36,8 +36,22 @@ export default class PedidoService {
     return newItem;
   }
 
-  public async findAll(): Promise<Array<PedidoEntity>> {
-    return await this.pedidoRepository.findAll();
+  public async findAll(): Promise<{ pedido: PedidoResponse }[]> {
+    const pedidos = await this.pedidoRepository.findAll();
+    const pedidosComItens = await Promise.all(
+      pedidos.map(async (pedido) => {
+        const itens = await this.pedidoItemRepository.findByPedidoId(pedido.id);
+
+        return {
+          pedido: {
+            pedidoDetalhe: pedido,
+            itens,
+          },
+        };
+      })
+    );
+
+    return pedidosComItens;
   }
 
   public async findOne(id: string): Promise<PedidoResponse | null> {

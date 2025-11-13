@@ -1,1 +1,43 @@
-<p>pedidos works!</p>
+<app-generic-modal></app-generic-modal>
+<div style="width: 60%; margin: 0 auto; margin-top: 2rem">
+  <po-tabs>
+    @for (item of statusOptions; track $index) {
+    <po-tab
+      (p-click)="selecionarStatus(item.value)"
+      [p-disabled]="false"
+      [p-label]="item.label"
+    >
+    </po-tab>
+    }
+  </po-tabs>
+
+  @if (pedidosFiltrados.length) { @for (pedidoItem of pedidosFiltrados; track
+  pedidoItem.pedido.pedidoDetalhe.id) {
+  <div class="po-lg-12 po-md-12 po-sm-12" style="margin-bottom: 1rem">
+    <po-widget
+      p-title="Pedido #{{ pedidoItem.pedido.pedidoDetalhe.id }}"
+      p-primary-label="Ver Detalhes"
+      (p-primary-action)="openModal(pedidoItem.pedido.pedidoDetalhe.id)"
+    >
+      <div class="po-text-center po-font-subtitle">
+        <strong>Status:</strong>
+        {{ pedidoItem.pedido.pedidoDetalhe.status | titlecase }}
+      </div>
+
+      <div class="po-text-center">
+        <strong>Data:</strong>
+        {{ pedidoItem.pedido.pedidoDetalhe.data | date : "short" }}
+      </div>
+
+      <div class="po-text-center po-mb-2">
+        <strong>Total:</strong>
+        R$ {{ pedidoItem.pedido.pedidoDetalhe.total | number : "1.2-2" }}
+      </div>
+    </po-widget>
+  </div>
+  } } @else {
+  <div class="po-text-center po-mt-4">
+    Nenhum pedido encontrado para este status.
+  </div>
+  }
+</div>
