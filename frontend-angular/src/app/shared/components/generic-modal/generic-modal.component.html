@@ -1,3 +1,57 @@
 <po-modal p-title="Detalhes do pedido">
-  teste</po-modal
->
+  <po-list-view p-property-title="name" [p-items]="elementos">
+    <ng-template p-list-view-content-template let-item>
+      <div class="po-row">
+        <po-info
+          class="po-md-12"
+          p-label="Produto"
+          [p-value]="item.produto.nome"
+        >
+        </po-info>
+        @if (editingItemId !== item.id) {
+        <po-info
+          class="po-md-12"
+          p-label="Quantidade"
+          [p-value]="item.quantidade"
+          (click)="iniciarEdicao(item)"
+        >
+        </po-info>
+        } @else {
+        <po-input
+          class="po-md-12"
+          p-label="Quantidade"
+          [(ngModel)]="novaQuantidade"
+        >
+        </po-input>
+        }
+        <po-info
+          class="po-md-12"
+          p-label="Subtotal"
+          [p-value]="
+            (item.subtotal | currency : 'BRL' : 'symbol' : '1.2-2') ?? ''
+          "
+        >
+        </po-info>
+
+        <div class="btns po-md-12" style="margin-top: 10px">
+          <po-button
+            p-label="Remover do pedido"
+            p-danger
+            (p-click)="deletarItemPedido(item.id)"
+          >
+          </po-button>
+
+          @if (editingItemId === item.id) {
+          <po-button
+            p-label="Salvar"
+            p-primary
+            style="margin-left: 10px"
+            (p-click)="salvarQuantidade(item)"
+          >
+          </po-button>
+          }
+        </div>
+      </div>
+    </ng-template>
+  </po-list-view>
+</po-modal>
