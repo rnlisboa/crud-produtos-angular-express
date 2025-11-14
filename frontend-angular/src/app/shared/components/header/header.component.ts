@@ -56,12 +56,6 @@ export class HeaderComponent {
 
   actionTools: Array<PoHeaderActionTool> = [
     {
-      label: 'Configurações',
-      icon: 'an an-gear-six',
-      tooltip: 'Configurações do sistema',
-      action: this.myAction.bind(this, 'Configuração'),
-    },
-    {
       label: 'Sair',
       icon: 'an an-sign-out',
       tooltip: 'Sair',
