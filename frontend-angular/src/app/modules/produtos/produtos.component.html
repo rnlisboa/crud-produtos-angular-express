@@ -1,16 +1,24 @@
+<app-produto-modal
+  (itensAtualizados)="findAllProdutosPedidos()"
+></app-produto-modal>
 <div class="po-pl-5 po-m-5">
   <po-button
     [p-label]="existePedidoProcessando ? 'Adicionar ao pedido' : 'Criar Pedido'"
-    class="po-pl-1 po-mb-1"
+    class="po-pl-1 po-mb-1 po-mr-1"
     [p-disabled]="!produtoPedido.length"
     (p-click)="adicionarAoPedido()"
+  ></po-button>
+
+  <po-button
+    p-icon="an an-plus"
+    p-label="Novo produto"
+    (p-click)="openProdutoModal()"
   ></po-button>
 
   <div>
     @for (item of produtos; track $index) {
     <po-widget
-      class="po-lg-6"
-      p-help="https://github.com/po-ui/po-angular/stargazers"
+      class="po-lg-6 po-mb-2"
       [p-title]="item.nome"
       p-tag="Sales"
       p-tag-icon="an an-arrow-circle-up"
@@ -31,6 +39,12 @@
           align-items: center;
         "
       >
+        <po-button
+          p-icon="an an-pencil"
+          p-label="Editar produto"
+          p-primary
+          (p-click)="openProdutoModal(item)"
+        ></po-button>
         @if(isProdutoSelecionado(item.id)){
         <po-number
           class="po-md-6 po-lg-3"

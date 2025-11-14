@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   PoButtonModule,
   PoFieldModule,
@@ -15,6 +15,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { PedidoService } from '../../services/pedidos/pedido.service';
 import { PedidoResponse } from '../../interfaces/response/pedido-response';
 import { ProdutoPedidoDTO } from '../../interfaces/dto/produto-pedido.dto';
+import { ProdutoModalComponent } from '../../shared/components/produto-modal/produto-modal.component';
 
 @Component({
   selector: 'app-produtos',
@@ -24,6 +25,7 @@ import { ProdutoPedidoDTO } from '../../interfaces/dto/produto-pedido.dto';
     PoButtonModule,
     PoFieldModule,
     FormsModule,
+    ProdutoModalComponent,
   ],
   templateUrl: './produtos.component.html',
   styleUrl: './produtos.component.less',
@@ -39,6 +41,9 @@ export class ProdutosComponent implements OnInit, OnDestroy {
   pedidos!: PedidoResponse;
   existePedidoProcessando: boolean = false;
   produtoPedido: ProdutoPedidoDTO[] = [];
+
+  @ViewChild(ProdutoModalComponent, { static: false })
+  produtoModal!: ProdutoModalComponent;
 
   constructor(
     private produtoService: ProdutoService,
@@ -193,5 +198,9 @@ export class ProdutosComponent implements OnInit, OnDestroy {
         },
       });
     }
+  }
+
+  openProdutoModal(produto?: ProdutoEntity) {
+    this.produtoModal.openModal(produto);
   }
 }

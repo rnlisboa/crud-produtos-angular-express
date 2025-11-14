@@ -7,6 +7,7 @@ import { PedidoStateService } from '../../store/pedido/pedido-state.service';
 import { CriarPedidoDTO } from '../../interfaces/dto/criar-pedido.dto';
 import PedidoEntity from '../../interfaces/domain/pedido.entity';
 import { ProdutoPedidoDTO } from '../../interfaces/dto/produto-pedido.dto';
+import PedidoItemEntity from '../../interfaces/domain/pedido-item.entity';
 
 @Injectable({
   providedIn: 'root',
@@ -71,6 +72,18 @@ export class PedidoService {
   findOne(id: string): Observable<{ pedido: PedidoResponse }> {
     return this.httpCliente
       .get<{ pedido: PedidoResponse }>(this._pedidosRoutes.findOne(id))
+      .pipe(map((res) => res));
+  }
+
+  updateItem(
+    id: string,
+    quantidade: number
+  ): Observable<{ message: string; item: PedidoItemEntity }> {
+    return this.httpCliente
+      .put<{ message: string; item: PedidoItemEntity }>(
+        this._pedidosRoutes.item.update(id),
+        { quantidade }
+      )
       .pipe(map((res) => res));
   }
 }

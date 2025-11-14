@@ -1,0 +1,14 @@
+<po-modal
+  p-title="Edite ou crie um produto"
+  #poModal
+  (p-close)="resetarProduto()"
+  (p-x-close)="resetarProduto()"
+  (p-dismiss)="resetarProduto()"
+>
+  <app-dynamic-form
+    [fields]="fields"
+    [model]="produto"
+    buttonLabel="Salvar"
+    (formSubmit)="updateOrCreate()"
+  ></app-dynamic-form>
+</po-modal>

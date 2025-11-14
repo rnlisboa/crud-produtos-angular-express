@@ -20,5 +20,28 @@ export class ProdutoService {
           return produtos;
         })
       );
-  } 
+  }
+
+  create(
+    produto: Partial<ProdutoEntity>
+  ): Observable<{ Produto: ProdutoEntity; message: string }> {
+    return this.httpCliente
+      .post<{ Produto: ProdutoEntity; message: string }>(
+        this._produtoRoutes.create,
+        produto
+      )
+      .pipe(map((res) => res));
+  }
+
+  update(
+    id: string,
+    produto: Partial<ProdutoEntity>
+  ): Observable<{ Produto: ProdutoEntity; message: string }> {
+    return this.httpCliente
+      .put<{ Produto: ProdutoEntity; message: string }>(
+        this._produtoRoutes.update(id),
+        produto
+      )
+      .pipe(map((res) => res));
+  }
 }
