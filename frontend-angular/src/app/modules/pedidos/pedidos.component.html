@@ -1,4 +1,4 @@
-<app-generic-modal></app-generic-modal>
+<app-generic-modal (itensAtualizados)="atualizarPedido()"> </app-generic-modal>
 <div style="width: 60%; margin: 0 auto; margin-top: 2rem">
   <po-tabs>
     @for (item of statusOptions; track $index) {
