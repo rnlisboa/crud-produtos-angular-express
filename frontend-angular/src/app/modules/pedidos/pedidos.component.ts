@@ -102,4 +102,8 @@ export class PedidosComponent implements OnInit {
       },
     });
   }
+
+  atualizarPedido() {
+    this.findAllPedidos();
+  }
 }
