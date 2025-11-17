@@ -88,9 +88,7 @@ export class GenericModalComponent {
   }
 
   openModal(elementos: PedidoItemResponse[], status?: StatusPedido) {
-    if (status === StatusPedido.PROCESSANDO) {
-      this.permiteOperacao = true;
-    }
+    this.permiteOperacao = status === StatusPedido.PROCESSANDO;
     this.elementos = elementos;
     this.poModal.open();
   }

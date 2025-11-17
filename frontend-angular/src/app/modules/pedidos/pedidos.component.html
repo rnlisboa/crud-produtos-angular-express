@@ -12,7 +12,7 @@
   </po-tabs>
 
   @if (pedidosFiltrados.length) { @for (pedidoItem of pedidosFiltrados; track
-  pedidoItem.pedido.pedidoDetalhe.id) {
+  $index) {
   <div class="po-lg-12 po-md-12 po-sm-12" style="margin-bottom: 1rem">
     <po-widget
       p-title="Pedido #{{ pedidoItem.pedido.pedidoDetalhe.id }}"

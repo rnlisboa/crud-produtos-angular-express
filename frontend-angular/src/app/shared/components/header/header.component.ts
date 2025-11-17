@@ -89,7 +89,6 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('test');
     this.pedidosState.pedidos$.subscribe({
       next: (res) => {
         if (res.pedido) {
@@ -121,7 +120,6 @@ export class HeaderComponent implements OnInit {
     if (action === 'signout') {
       this.authService.logout();
     } else {
-      console.log('deve ir para', action);
       this.redirect(action);
     }
   }
