@@ -86,4 +86,10 @@ export class PedidoService {
       )
       .pipe(map((res) => res));
   }
+
+  concluirPedido(id: string): Observable<{ message: string }> {
+    return this.httpCliente
+      .put<{ message: string }>(this._pedidosRoutes.concluir(id), {})
+      .pipe(map((res) => res));
+  }
 }

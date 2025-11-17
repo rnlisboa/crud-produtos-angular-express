@@ -34,6 +34,7 @@
         R$ {{ pedidoItem.pedido.pedidoDetalhe.total | number : "1.2-2" }}
       </div>
     </po-widget>
+    <po-button class="po-mt-1" p-label="Concluir pedido" (p-click)="concluirPedido(pedidoItem.pedido.pedidoDetalhe.id)"></po-button>
   </div>
   } } @else {
   <div class="po-text-center po-mt-4">
