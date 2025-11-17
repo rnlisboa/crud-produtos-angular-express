@@ -98,12 +98,28 @@ export class PedidosComponent implements OnInit {
   openModal(id: string) {
     this.pedidoService.findOne(id).subscribe({
       next: (res) => {
-        this.genericModal.openModal(res.pedido.itens);
+        this.genericModal.openModal(
+          res.pedido.itens,
+          res.pedido.pedidoDetalhe.status
+        );
       },
     });
   }
 
   atualizarPedido() {
     this.findAllPedidos();
+  }
+
+  concluirPedido(pedidoId: string) {
+    this.pedidoService.concluirPedido(pedidoId).subscribe({
+      next: (res) => {
+        this.poNotification.success(res.message);
+        this.atualizarPedido();
+      },
+      error: (res) => {
+        this.poNotification.error('Erro ao concluir pedido');
+        console.log(res);
+      },
+    });
   }
 }
