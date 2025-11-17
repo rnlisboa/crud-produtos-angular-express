@@ -5,7 +5,11 @@
   <po-button
     [p-label]="existePedidoProcessando ? 'Adicionar ao pedido' : 'Criar Pedido'"
     class="po-pl-1 po-mb-1 po-mr-1"
-    [p-disabled]="!produtoPedido.length"
+    [p-disabled]="
+      existePedidoProcessando
+        ? !produtoPedido.length
+        : !criarPedidoDTO.produtos.length
+    "
     (p-click)="adicionarAoPedido()"
   ></po-button>
 

@@ -34,14 +34,14 @@
         </po-info>
 
         <div class="btns po-md-12" style="margin-top: 10px">
+          @if (permiteOperacao) {
           <po-button
             p-label="Remover do pedido"
             p-danger
             (p-click)="deletarItemPedido(item.id)"
           >
           </po-button>
-
-          @if (editingItemId === item.id) {
+          } @if (editingItemId === item.id) {
           <po-button
             p-label="Salvar"
             p-primary

@@ -173,6 +173,7 @@ export class ProdutosComponent implements OnInit, OnDestroy {
       this.pedidoService.create(this.criarPedidoDTO).subscribe({
         next: (res) => {
           this.poNotification.success(res.message);
+          this.findAllProdutosPedidos();
           this.produtoPedido = [];
         },
         error: (res) => {

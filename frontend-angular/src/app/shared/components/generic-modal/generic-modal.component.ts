@@ -20,6 +20,7 @@ import { PedidoItemResponse } from '../../../interfaces/response/pedido-response
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { PedidoService } from '../../../services/pedidos/pedido.service';
 import { FormsModule } from '@angular/forms';
+import { StatusPedido } from '../../../enum/status-pedido.enum';
 
 @Component({
   selector: 'app-generic-modal',
@@ -44,12 +45,15 @@ export class GenericModalComponent {
 
   editingItemId: string | null = null;
   novaQuantidade: number | null = null;
+  permiteOperacao: boolean = false;
 
   constructor(private pedidoService: PedidoService) {}
 
   iniciarEdicao(item: PedidoItemResponse) {
-    this.editingItemId = item.id;
-    this.novaQuantidade = item.quantidade;
+    if (this.permiteOperacao) {
+      this.editingItemId = item.id;
+      this.novaQuantidade = item.quantidade;
+    }
   }
 
   salvarQuantidade(item: PedidoItemResponse) {
@@ -83,7 +87,10 @@ export class GenericModalComponent {
     });
   }
 
-  openModal(elementos: PedidoItemResponse[]) {
+  openModal(elementos: PedidoItemResponse[], status?: StatusPedido) {
+    if (status === StatusPedido.PROCESSANDO) {
+      this.permiteOperacao = true;
+    }
     this.elementos = elementos;
     this.poModal.open();
   }
