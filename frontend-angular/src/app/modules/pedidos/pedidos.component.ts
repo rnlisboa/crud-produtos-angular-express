@@ -48,6 +48,8 @@ export class PedidosComponent implements OnInit {
     { label: 'Concluído', value: StatusPedido.CONCLUIDO },
   ];
 
+  deveMostrarBotaoConcluir: boolean = true;
+
   constructor(private pedidoService: PedidoService) {}
 
   ngOnInit(): void {
@@ -62,12 +64,6 @@ export class PedidosComponent implements OnInit {
         );
         this.pedidosProcessando = res.filter(
           (p) => p.pedido.pedidoDetalhe.status === StatusPedido.PROCESSANDO
-        );
-        this.pedidosCancelados = res.filter(
-          (p) => p.pedido.pedidoDetalhe.status === StatusPedido.CANCELADO
-        );
-        this.pedidoEnviado = res.filter(
-          (p) => p.pedido.pedidoDetalhe.status === StatusPedido.ENVIADO
         );
       },
       error: (res) => {
@@ -93,6 +89,7 @@ export class PedidosComponent implements OnInit {
 
   selecionarStatus(el: StatusPedido) {
     this.selectedStatus = el;
+    this.setDeveMostrarBotaoConcluir();
   }
 
   openModal(id: string) {
@@ -121,5 +118,10 @@ export class PedidosComponent implements OnInit {
         console.log(res);
       },
     });
+  }
+
+  setDeveMostrarBotaoConcluir() {
+    this.deveMostrarBotaoConcluir =
+      this.selectedStatus === StatusPedido.PROCESSANDO;
   }
 }

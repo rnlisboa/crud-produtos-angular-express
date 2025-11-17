@@ -24,9 +24,6 @@ export class PedidoService {
     return this.httpCliente
       .get<{ pedido: PedidoResponse }[]>(this._pedidosRoutes.findAll)
       .pipe(
-        tap((pedidos) => {
-          this.pedidoState.setPedidos(pedidos);
-        }),
         map((pedidos) => {
           return pedidos;
         })

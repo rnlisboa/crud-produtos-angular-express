@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   Input,
+  OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -21,6 +22,7 @@ import {
   PoToasterOrientation,
 } from '@po-ui/ng-components';
 import { AuthService } from '../../../services/auth/auth.service';
+import { PedidoStateService } from '../../../store/pedido/pedido-state.service';
 
 @Component({
   selector: 'app-header',
@@ -28,8 +30,9 @@ import { AuthService } from '../../../services/auth/auth.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.less',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @ViewChild('meuTemplate') meuTemplate!: TemplateRef<any>;
+  pedidosCount: number = 0;
 
   listItem: Array<PoHeaderActionToolItem> = [
     {
@@ -51,7 +54,6 @@ export class HeaderComponent {
       label: 'Produtos',
       action: this.myAction.bind(this, '/produtos'),
     },
-    { label: 'Meus pedidos', action: this.myAction.bind(this, '/pedidos') },
   ];
 
   actionTools: Array<PoHeaderActionTool> = [
@@ -62,11 +64,11 @@ export class HeaderComponent {
       action: this.myAction.bind(this, 'signout'),
     },
     {
-      label: 'Notificações',
-      icon: 'an an-chat-circle-dots',
-      tooltip: 'Notificações do usuário',
-      badge: 5,
-      items: this.listItem,
+      label: 'Carrinho',
+      icon: 'an an-shopping-cart',
+      tooltip: 'Meu carrinho',
+      badge: 0,
+      action: this.myAction.bind(this, '/pedidos'),
     },
   ];
 
@@ -82,8 +84,21 @@ export class HeaderComponent {
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private pedidosState: PedidoStateService
   ) {}
+
+  ngOnInit(): void {
+    console.log('test');
+    this.pedidosState.pedidos$.subscribe({
+      next: (res) => {
+        if (res.pedido) {
+          this.pedidosCount = res.pedido.pedidoDetalhe.quantidade;
+          this.updateCartBadge();
+        }
+      },
+    });
+  }
 
   ngAfterViewInit(): void {
     this.actionTools = this.actionTools.map((action) => {
@@ -106,11 +121,26 @@ export class HeaderComponent {
     if (action === 'signout') {
       this.authService.logout();
     } else {
+      console.log('deve ir para', action);
       this.redirect(action);
     }
   }
 
   redirect(target: string) {
     this.router.navigate([target]);
+  }
+
+  private updateCartBadge() {
+    this.actionTools = this.actionTools.map((tool) => {
+      if (tool.label === 'Carrinho') {
+        return {
+          ...tool,
+          badge: this.pedidosCount,
+        };
+      }
+      return tool;
+    });
+
+    this.cd.detectChanges();
   }
 }

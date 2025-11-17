@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { PoNotificationService } from '@po-ui/ng-components';
 import ClienteEntity from '../../interfaces/domain/cliente.entity';
 import { PedidoService } from '../pedidos/pedido.service';
+import { PedidoStateService } from '../../store/pedido/pedido-state.service';
+import { StatusPedido } from '../../enum/status-pedido.enum';
 
 export type Credentials = {
   nome: string;
@@ -19,7 +21,8 @@ export class AuthService {
   constructor(
     private clienteService: ClienteService,
     private pedidoService: PedidoService,
-    private router: Router
+    private router: Router,
+    private pedidoState: PedidoStateService
   ) {}
 
   isAuthenticated(): boolean {
@@ -39,7 +42,17 @@ export class AuthService {
         if (cliente) {
           localStorage.setItem('cliente', JSON.stringify(cliente));
 
-          this.pedidoService.findAll().subscribe();
+          this.pedidoService.findAll().subscribe({
+            next: (res) => {
+              const pedido = res.find(
+                (p) =>
+                  p.pedido.pedidoDetalhe.status === StatusPedido.PROCESSANDO
+              );
+              if (pedido) {
+                this.pedidoState.setPedidos(pedido);
+              }
+            },
+          });
           this.poNotification.success('Autenticado com sucesso');
           this.router.navigate(['/produtos']);
         }

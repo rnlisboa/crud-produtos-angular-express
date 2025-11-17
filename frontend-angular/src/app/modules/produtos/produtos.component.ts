@@ -16,6 +16,7 @@ import { PedidoService } from '../../services/pedidos/pedido.service';
 import { PedidoResponse } from '../../interfaces/response/pedido-response';
 import { ProdutoPedidoDTO } from '../../interfaces/dto/produto-pedido.dto';
 import { ProdutoModalComponent } from '../../shared/components/produto-modal/produto-modal.component';
+import { PedidoStateService } from '../../store/pedido/pedido-state.service';
 
 @Component({
   selector: 'app-produtos',
@@ -48,7 +49,8 @@ export class ProdutosComponent implements OnInit, OnDestroy {
   constructor(
     private produtoService: ProdutoService,
     private authService: AuthService,
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    private pedidoState: PedidoStateService
   ) {
     const loggedCliente = this.authService.getLoggedCliente();
     if (loggedCliente) {
@@ -85,6 +87,7 @@ export class ProdutosComponent implements OnInit, OnDestroy {
         if (pedidosProcessando) {
           this.pedidos = pedidosProcessando.pedido;
           this.existePedidoProcessando = !!pedidosProcessando.pedido;
+          this.pedidoState.setPedidos(pedidosProcessando);
         }
       },
     });
